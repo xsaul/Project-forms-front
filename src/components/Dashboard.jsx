@@ -10,7 +10,7 @@ const Dashboard = ({userName}) => {
 
   const handleCreate = async (newTemplate) => {
     const {image, ...templateData} = newTemplate;
-  const response = await fetch("http://localhost:5000/registerTemplate", {
+  const response = await fetch("https://project-forms-back.onrender.com/registerTemplate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(templateData),
@@ -23,7 +23,7 @@ const Dashboard = ({userName}) => {
 useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const response = await fetch("http://localhost:5000/getTemplates");
+        const response = await fetch("https://project-forms-back.onrender.com/getTemplates");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

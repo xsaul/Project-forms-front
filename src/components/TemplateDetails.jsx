@@ -59,7 +59,7 @@ const handleChange = (questionId, value) => {
 
   const fetchTemplate = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/templates/${id}`);
+      const response = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -90,7 +90,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchUserAnswers = async () => {
     if (!userId || !id) return;
-    const res = await fetch(`http://localhost:5000/userResponse?userId=${userId}&templateId=${id}`);
+    const res = await fetch(`https://project-forms-back.onrender.com/userResponse?userId=${userId}&templateId=${id}`);
     if (res.ok) {
       const data = await res.json();
       setAnswers(data)
@@ -129,7 +129,7 @@ const handleSubmit = async (e) => {
     payload.answers = changedAnswers;
   }
   try {
-    const response = await fetch(`http://localhost:5000${endpoint}`, {
+    const response = await fetch(`https://project-forms-back.onrender.com${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
