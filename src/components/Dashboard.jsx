@@ -7,6 +7,8 @@ const Dashboard = ({userName}) => {
 
    const [isModalOpen, setIsModalOpen] = useState(false);
   const [templates, setTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleCreate = async (newTemplate) => {
     const {image, ...templateData} = newTemplate;
@@ -17,6 +19,30 @@ const Dashboard = ({userName}) => {
   });
    if (response.ok) {
      setTemplates([...templates, newTemplate]);
+  }
+  };
+
+  const handleEditTemplate = async (updatedTemplate) => {
+    try{
+  const response = await fetch("https://project-forms-back.onrender.com/editTemplateQuestions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      templateId: updatedTemplate.templateId,
+      authorName: updatedTemplate.authorName,
+      questions: updatedTemplate.questions,
+    }),
+  });
+   if (response.ok) {
+     setTemplates((prevTemplates) =>
+        prevTemplates.map((template) =>
+          template.id === updatedTemplate.templateId
+            ? { ...template, questions: updatedTemplate.questions }
+            : template
+        ));
+   }
+  } catch (err){
+    console.error("Error:", err);
   }
   };
 
@@ -35,6 +61,12 @@ useEffect(() => {
     };
     fetchTemplates();
   }, []);
+
+  function handleEditClick(template) {  
+  setSelectedTemplate(template);
+  setIsEditing(true);
+  isModalOpen(true);
+}
     
   return (
     <div className="bg-[#ecf1f4] h-screen">
@@ -51,8 +83,17 @@ useEffect(() => {
       </div>
      <div className="mt-6 grid grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-y-4 gap-x-2">
   {templates.map((template, index) => (
-    <TemplateCard key={index} template={template} />
+    <TemplateCard key={index} template={template} userName={userName} onEditClick={handleEditClick}/>
   ))}
+  {isModalOpen && selectedTemplate && (
+      <TemplateModal
+        template={selectedTemplate}
+        userName={userName}
+        onClose={() => isModalOpen(false)}
+        onEdit={handleEditTemplate}
+        isEditing={isEditing}
+      />
+    )}
 </div>
 </div>
     </div>

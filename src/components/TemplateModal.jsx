@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const TemplateModal = ({ isOpen, onClose, onCreate, authorName }) => {
+const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEditing, onEdit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [topic, setTopic] = useState("Choose a topic");
@@ -18,8 +18,22 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName }) => {
   radio: 0,
 });
 
+useEffect(() => {
+  if (isEditing && template) {
+    setTitle(template.title);
+    setDescription(template.description);
+    setTopic(template.topic);
+    setIsPublic(template.isPublic);
+    setImage(template.image || null);
+    setLabels(template.labels || []);
+    setQuestions(template.questions || []);
+    setQuestionId(template.questions?.length + 1 || 1);
+  }
+}, [isEditing, template]);
+
   const handleSubmit = () => {
-    const newTemplate = { 
+    const newTemplate = {
+    templateId: template?.id,   
     title: title, 
     description: description, 
     topic: topic, 
@@ -29,7 +43,11 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName }) => {
     questions: questions, 
     authorName: authorName
   };
+  if(isEditing){
+    onEdit(newTemplate);
+  }else{
     onCreate(newTemplate);
+  }
     onClose();
     setTitle("");
     setDescription("");
@@ -206,7 +224,7 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName }) => {
     </div>
     </div>
         <div className="flex justify-end items-center mt-4 gap-x-4">
-        <button className="bg-[#3e2e2f] hover:bg-[#655859] flex justify-center rounded px-4 py-2 text-white cursor-pointer" onClick={handleSubmit}>Create</button>
+        <button className="bg-[#3e2e2f] hover:bg-[#655859] flex justify-center rounded px-4 py-2 text-white cursor-pointer" onClick={handleSubmit}>{isEditing ? "Save Changes" : "Create"}</button>
         <button className="text-gray-600 hover:underline cursor-pointer" onClick={onClose}>Cancel</button>
         </div>
       </div>

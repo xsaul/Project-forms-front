@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const TemplateCard = ({ template }) => {
+const TemplateCard = ({ template, userName, onEditClick }) => {
 const colors = [
    "bg-blue-200",
    "bg-orange-200",
@@ -13,6 +13,8 @@ const colors = [
 function getColorFromId(id) {
   return colors[id % colors.length];
 }
+
+const isAuthor = userName === template.authorName;
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-md">
@@ -29,7 +31,12 @@ function getColorFromId(id) {
         )}
       </div>
       <p className="mt-3 text-gray-600 text-sm">{template.description}</p>
+      <div>
       <p className="mt-2 text-gray-500 text-xs">By {template.authorName}</p>
+      {isAuthor && (
+    <button onClick={() => onEditClick(template)}>Edit Questions</button>
+  )}
+      </div>
     </div>
   );
 };
