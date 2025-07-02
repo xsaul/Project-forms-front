@@ -65,7 +65,7 @@ useEffect(() => {
   function handleEditClick(template) {  
   setSelectedTemplate(template);
   setIsEditing(true);
-  isModalOpen(true);
+  setIsModalOpen(true);
 }
     
   return (

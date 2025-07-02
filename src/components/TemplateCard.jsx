@@ -31,10 +31,10 @@ const isAuthor = userName === template.authorName;
         )}
       </div>
       <p className="mt-3 text-gray-600 text-sm">{template.description}</p>
-      <div>
+      <div className="flex items-end justify-between">
       <p className="mt-2 text-gray-500 text-xs">By {template.authorName}</p>
       {isAuthor && (
-    <button onClick={() => onEditClick(template)}>Edit Questions</button>
+    <button clasname="text-[13px] font-bold text-gray-800 hover:underline" onClick={() => onEditClick(template)}>Edit Questions</button>
   )}
       </div>
     </div>
