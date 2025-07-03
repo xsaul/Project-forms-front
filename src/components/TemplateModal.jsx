@@ -20,16 +20,14 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
 
 useEffect(() => {
   if (isEditing && template) {
-    // setTitle(template.title ?? "");
-    // setDescription(template.description ?? "");
-    // setTopic(template.topic ?? "Choose a topic");
-    // setIsPublic(template.isPublic ?? false);
-    // setImage(template.image ?? null);
-    // setLabels(template.labels ?? []);
-    // setQuestions(template.questions ?? []);
-    // setQuestionId((template.questions?.length ?? 0) + 1);
-    console.log("Template:", template);
-    setTitle(template.title || "");
+    setTitle(template.title ?? "");
+    setDescription(template.description ?? "");
+    setTopic(template.topic ?? "Choose a topic");
+    setIsPublic(template.isPublic ?? false);
+    setImage(template.image ?? null);
+    setLabels(template.labels ?? []);
+    setQuestions(template.questions ?? []);
+    setQuestionId((template.questions?.length ?? 0) + 1);
   }
 }, [isEditing, template]);
 
@@ -89,8 +87,6 @@ useEffect(() => {
   const removeQuestion = (id) => {
     setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
   };
-
-  console.log("Title:", title);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
