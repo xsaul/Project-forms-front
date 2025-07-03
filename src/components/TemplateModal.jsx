@@ -35,6 +35,8 @@ useEffect(() => {
   }
 }, [template?.id, isEditing]);
 
+console.log("Current state:", { title, description, topic });
+
 
   const handleSubmit = () => {
     const newTemplate = {
