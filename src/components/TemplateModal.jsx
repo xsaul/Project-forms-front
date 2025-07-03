@@ -32,15 +32,6 @@ useEffect(() => {
     setLabels(template.labels ?? []);
     setQuestions(template.questions ?? []);
     setQuestionId((template.questions?.length ?? 0) + 1);
-  } else {
-    setTitle("");
-    setDescription("");
-    setTopic("Choose a topic");
-    setIsPublic(false);
-    setImage(null);
-    setLabels([]);
-    setQuestions([]);
-    setQuestionId(1);
   }
 }, [template?.id, isEditing]);
 
