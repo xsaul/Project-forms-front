@@ -29,6 +29,7 @@ useEffect(() => {
     // setQuestions(template.questions ?? []);
     // setQuestionId((template.questions?.length ?? 0) + 1);
     console.log("Template:", template);
+    setTitle(template.title || "");
   }
 }, [isEditing, template]);
 
