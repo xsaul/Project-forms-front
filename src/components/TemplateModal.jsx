@@ -20,14 +20,22 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
 
 useEffect(() => {
   if (isEditing && template) {
-    setTitle(template.title ?? "");
-    setDescription(template.description ?? "");
-    setTopic(template.topic ?? "Choose a topic");
-    setIsPublic(template.isPublic ?? false);
-    setImage(template.image ?? null);
-    setLabels(template.labels ?? []);
-    setQuestions(template.questions ?? []);
-    setQuestionId((template.questions?.length ?? 0) + 1);
+    // setTitle(template.title ?? "");
+    // setDescription(template.description ?? "");
+    // setTopic(template.topic ?? "Choose a topic");
+    // setIsPublic(template.isPublic ?? false);
+    // setImage(template.image ?? null);
+    // setLabels(template.labels ?? []);
+    // setQuestions(template.questions ?? []);
+    // setQuestionId((template.questions?.length ?? 0) + 1);
+    console.log("Template loaded:", {
+  title: template.title,
+  description: template.description,
+  topic: template.topic,
+  isPublic: template.isPublic,
+  labels: template.labels,
+  questions: template.questions,
+});
   }
 }, [isEditing, template]);
 
