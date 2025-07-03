@@ -20,14 +20,14 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
 
 useEffect(() => {
   if (isEditing && template) {
-    setTitle(template.title || "");
-    setDescription(template.description || "");
-    setTopic(template.topic || "Choose a topic");
-    setIsPublic(template.isPublic || false);
-    setImage(template.image || null);
-    setLabels(template.labels || []);
-    setQuestions(template.questions || []);
-    setQuestionId(template.questions?.length + 1 || 1);
+    setTitle(template.title ?? "");
+    setDescription(template.description ?? "");
+    setTopic(template.topic ?? "Choose a topic");
+    setIsPublic(template.isPublic ?? false);
+    setImage(template.image ?? null);
+    setLabels(template.labels ?? []);
+    setQuestions(template.questions ?? []);
+    setQuestionId((template.questions?.length ?? 0) + 1);
   }
 }, [isEditing, template]);
 
