@@ -18,22 +18,18 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
   radio: 0,
 });
 
-// useEffect(() => {
-//   if (isEditing && template) {
-//     setTitle(template.title);
-//     setDescription(template.description);
-//     setTopic(template.topic);
-//     setIsPublic(template.isPublic);
-//     setImage(template.image || null);
-//     setLabels(template.labels || []);
-//     setQuestions(template.questions || []);
-//     setQuestionId(template.questions?.length + 1 || 1);
-//   }
-// }, [isEditing, template]);
-
 useEffect(() => {
-  console.log("Editing template:", template);
-}, [template]);
+  if (isEditing && template) {
+    setTitle(template.title || "");
+    setDescription(template.description || "");
+    setTopic(template.topic || "Choose a topic");
+    setIsPublic(template.isPublic || false);
+    setImage(template.image || null);
+    setLabels(template.labels || []);
+    setQuestions(template.questions || []);
+    setQuestionId(template.questions?.length + 1 || 1);
+  }
+}, [isEditing, template]);
 
   const handleSubmit = () => {
     const newTemplate = {
