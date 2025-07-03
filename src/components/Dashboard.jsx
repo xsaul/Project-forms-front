@@ -87,7 +87,6 @@ useEffect(() => {
   ))}
   {isModalOpen && selectedTemplate && (
       <TemplateModal
-      key={selectedTemplate?.id || "new"}
         template={selectedTemplate}
         userName={userName}
         onClose={() => isModalOpen(false)}
