@@ -18,11 +18,12 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
   radio: 0,
 });
 
-  console.log("Rendering modal for template:", template?.title);
-
 
 useEffect(() => {
-  if (isEditing && template) {
+  if (!template) return;
+
+  if (isEditing) {
+    console.log("Setting state from template:", template);
     setTitle(template.title ?? "");
     setDescription(template.description ?? "");
     setTopic(template.topic ?? "Choose a topic");
@@ -31,9 +32,18 @@ useEffect(() => {
     setLabels(template.labels ?? []);
     setQuestions(template.questions ?? []);
     setQuestionId((template.questions?.length ?? 0) + 1);
-    console.log("Setting state from template:", template);
+  } else {
+    setTitle("");
+    setDescription("");
+    setTopic("Choose a topic");
+    setIsPublic(false);
+    setImage(null);
+    setLabels([]);
+    setQuestions([]);
+    setQuestionId(1);
   }
-}, [template?.id]);
+}, [template?.id, isEditing]);
+
 
   const handleSubmit = () => {
     const newTemplate = {
