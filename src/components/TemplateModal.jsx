@@ -18,6 +18,9 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
   radio: 0,
 });
 
+  console.log("Rendering modal for template:", template?.title);
+
+
 useEffect(() => {
   if (isEditing && template) {
     setTitle(template.title ?? "");
@@ -28,8 +31,9 @@ useEffect(() => {
     setLabels(template.labels ?? []);
     setQuestions(template.questions ?? []);
     setQuestionId((template.questions?.length ?? 0) + 1);
+    console.log("Setting state from template:", template);
   }
-}, [isEditing, template]);
+}, [template?.id]);
 
   const handleSubmit = () => {
     const newTemplate = {
@@ -87,8 +91,6 @@ useEffect(() => {
   const removeQuestion = (id) => {
     setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
   };
-
-  console.log("Rendering modal for template:", template?.title);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">

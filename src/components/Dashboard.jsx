@@ -87,9 +87,10 @@ useEffect(() => {
   ))}
   {isModalOpen && selectedTemplate && (
       <TemplateModal
+        key={selectedTemplate.id}
         template={selectedTemplate}
         userName={userName}
-        onClose={() => isModalOpen(false)}
+        onClose={() => {isModalOpen(false); setSelectedTemplate(null);}}
         onEdit={handleEditTemplate}
         isEditing={isEditing}
       />
