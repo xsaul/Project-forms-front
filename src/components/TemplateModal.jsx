@@ -17,7 +17,7 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
- const [loading, setLoading] = useState(false);
+ const [loading, setLoading] = useState(isEditing);
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
