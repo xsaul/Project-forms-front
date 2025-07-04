@@ -42,6 +42,13 @@ useEffect(() => {
     fetchTemplate();
 }, [templateId, isEditing]);
 
+useEffect(() => {
+  if (isEditing) {
+    console.log("Updated state:", { title, description, topic });
+  }
+}, [title, description, topic, isEditing]);
+
+
 
   const handleSubmit = () => {
   const newTemplate = {
