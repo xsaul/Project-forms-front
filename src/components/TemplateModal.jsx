@@ -17,16 +17,19 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
+ const [loading, setLoading] = useState(false);
+
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
 useEffect(() => {
   if (!isEditing || !templateId) return;
+
   const fetchTemplate = async () => {
+    setLoading(true);
     try {
-     const id = templateId;
+      const id = templateId;
       const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
       const data = await res.json();
-      console.log("Fetched template:", data);
       setTitle(data.title ?? "");
       setDescription(data.description ?? "");
       setTopic(data.topic ?? "Choose a topic");
@@ -37,17 +40,12 @@ useEffect(() => {
       setQuestionId((data.questions?.length ?? 0) + 1);
     } catch (err) {
       console.error("Failed to fetch template:", err);
+    } finally {
+      setLoading(false);
     }
   };
-    fetchTemplate();
+  fetchTemplate();
 }, [templateId, isEditing]);
-
-useEffect(() => {
-  if (isEditing) {
-    console.log("Updated state:", { title, description, topic });
-  }
-}, [title, description, topic, isEditing]);
-
 
 
   const handleSubmit = () => {
@@ -111,8 +109,12 @@ useEffect(() => {
 
 return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black opacity-50"></div>
-      <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
+  <div className="fixed inset-0 bg-black opacity-50"></div>
+  <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
+    {loading ? (
+      <p className="text-gray-500">Loading template...</p>
+    ) : (
+      <>
         <h1 className="text-lg font-bold">New Template</h1>
         <label className="block mt-4">Title</label>
         <input
@@ -120,16 +122,14 @@ return (
           className="rounded border px-[5px] py-[3px] border-[#c0d0d9] w-full"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
-        />
+          required/>
         <label className="block mt-4">Description</label>
         <textarea
           className="rounded border px-[5px] py-[3px] border-[#c0d0d9] w-full"
           rows="4"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          required
-        />
+          required/>
         <label className="block mt-4">Topic</label>
         <select
           className="rounded border px-[5px] py-[3px] border-[#c0d0d9] w-full"
@@ -147,16 +147,14 @@ return (
             className="mr-2"
             checked={isPublic}
             onChange={(e) => setIsPublic(e.target.checked)}
-            required
-          />
+            required/>
           Make the template public?
         </label>
         <label className="block mt-4 mb-1">Upload Image (Optional)</label>
         <input
           type="file"
           className="rounded border p-[5px] border-[#c0d0d9] w-full"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
+          onChange={(e) => setImage(e.target.files[0])}/>
         <div>
           <label className="block mt-4 mb-1">Labels (Press Enter to add)</label>
           <input
@@ -165,8 +163,7 @@ return (
             value={labelInput}
             onChange={(e) => setLabelInput(e.target.value)}
             onKeyDown={handleAddLabel}
-            placeholder="Type a label and press Enter"
-          />
+            placeholder="Type a label and press Enter"/>
           <div className="mt-2 flex flex-wrap gap-2">
             {labels.map((label, index) => (
               <span key={index} className="bg-gray-300 px-3 py-1 rounded text-sm flex items-center">
@@ -193,8 +190,7 @@ return (
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder={`Question ${index + 1}`}
                   value={question.text}
-                  onChange={(e) => updateQuestion(question.id, "text", e.target.value)}
-                />
+                  onChange={(e) => updateQuestion(question.id, "text", e.target.value)}/>
                 <select
                   className="mt-2 w-full p-2 border border-gray-300 rounded"
                   value={question.type}
@@ -221,8 +217,7 @@ return (
                     className="mt-2 w-full p-2 border border-gray-300 rounded"
                     placeholder="Enter label for the checkbox"
                     value={question.booleanLabel || ""}
-                    onChange={(e) => updateQuestion(question.id, "booleanLabel", e.target.value)}
-                  />
+                    onChange={(e) => updateQuestion(question.id, "booleanLabel", e.target.value)}/>
                 )}
                 {question.type === "radio" && (
                   <div className="mt-2">
@@ -237,16 +232,13 @@ return (
                             const updatedOptions = [...question.radioOptions];
                             updatedOptions[index] = e.target.value;
                             updateQuestion(question.id, "radioOptions", updatedOptions);
-                          }}
-                        />
+                          }}/>
                         <button
                           className="ml-2 text-red-500 hover:text-red-500 cursor-pointer"
                           onClick={() => {
                             const filteredOptions = question.radioOptions.filter((_, i) => i !== index);
                             updateQuestion(question.id, "radioOptions", filteredOptions);
-                          }}>
-                          ✕
-                        </button>
+                          }}>✕</button>
                       </div>
                     ))}
                     <button
@@ -279,8 +271,10 @@ return (
             Cancel
           </button>
         </div>
-      </div>
-    </Dialog>
+      </>
+    )}
+  </div>
+</Dialog>
   );
 };
 
