@@ -19,40 +19,27 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
 });
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
-// useEffect(() => {
-//   if (!isEditing || !templateId) return;
-//   const fetchTemplate = async () => {
-//     try {
-//      const id = templateId;
-//       const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
-//       const data = await res.json();
-//       setTitle(data.title ?? "");
-//       setDescription(data.description ?? "");
-//       setTopic(data.topic ?? "Choose a topic");
-//       setIsPublic(data.isPublic ?? false);
-//       setImage(data.image ?? null);
-//       setLabels(data.labels ?? []);
-//       setQuestions(data.questions ?? []);
-//       setQuestionId((data.questions?.length ?? 0) + 1);
-//     } catch (err) {
-//       console.error("Failed to fetch template:", err);
-//     }
-//   };
-//   if (isEditing && templateId) {
-//     fetchTemplate();
-//   }
-// }, [templateId, isEditing]);
-
 useEffect(() => {
+  if (!isEditing || !templateId) return;
+  const fetchTemplate = async () => {
+    try {
+     const id = templateId;
+      const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
+      const data = await res.json();
+      setTitle(data.title ?? "");
+      setDescription(data.description ?? "");
+      setTopic(data.topic ?? "Choose a topic");
+      setIsPublic(data.isPublic ?? false);
+      setImage(data.image ?? null);
+      setLabels(data.labels ?? []);
+      setQuestions(data.questions ?? []);
+      setQuestionId((data.questions?.length ?? 0) + 1);
+    } catch (err) {
+      console.error("Failed to fetch template:", err);
+    }
+  };
   if (isEditing && templateId) {
-    setTitle(templateId.title ?? "");
-    setDescription(templateId.description ?? "");
-    setTopic(templateId.topic ?? "Choose a topic");
-    setIsPublic(templateId.isPublic ?? false);
-    setImage(templateId.image ?? null);
-    setLabels(templateId.labels ?? []);
-    setQuestions(templateId.questions ?? []);
-    setQuestionId((templateId.questions?.length ?? 0) + 1);
+    fetchTemplate();
   }
 }, [templateId, isEditing]);
 
