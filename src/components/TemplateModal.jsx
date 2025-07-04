@@ -26,6 +26,7 @@ useEffect(() => {
      const id = templateId;
       const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
       const data = await res.json();
+      console.log("Fetched template:", data);
       setTitle(data.title ?? "");
       setDescription(data.description ?? "");
       setTopic(data.topic ?? "Choose a topic");
@@ -38,9 +39,7 @@ useEffect(() => {
       console.error("Failed to fetch template:", err);
     }
   };
-  if (isEditing && templateId) {
     fetchTemplate();
-  }
 }, [templateId, isEditing]);
 
 
