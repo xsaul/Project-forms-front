@@ -9,7 +9,7 @@ const Dashboard = ({userName}) => {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [selectedTemplateData, setSelectedTemplateData] = useState(null);
 
   const handleCreate = async (newTemplate) => {
     const {image, ...templateData} = newTemplate;
@@ -63,13 +63,20 @@ useEffect(() => {
     fetchTemplates();
   }, []);
 
-  function handleEditClick(templateId) {  
+  const handleEditClick = (templateId) => {
   setIsEditing(true);
   setSelectedTemplateId(templateId);
-  setLoading(true);
-  setIsModalOpen(true);
-}
-    
+  const id = templateId;
+  fetch(`https://project-forms-back.onrender.com/templates/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setSelectedTemplateData(data); 
+      setIsModalOpen(true); 
+    })
+    .catch((err) => {
+      console.error("Failed to fetch template:", err);
+    })
+};
   return (
     <div className="bg-[#ecf1f4] h-screen">
     <div className="pt-22 px-6">
@@ -87,14 +94,13 @@ useEffect(() => {
   {templates.map((template, index) => (
     <TemplateCard key={index} template={template} userName={userName} onEditClick={handleEditClick}/>
   ))}
-  {isModalOpen && selectedTemplateId && (
+  {isModalOpen && (
       <TemplateModal
         templateId={selectedTemplateId}
         userName={userName}
-        onClose={() => {isModalOpen(false); setSelectedTemplateId(null);}}
+        onClose={() => {isModalOpen(false); setSelectedTemplateData(null);}}
         onEdit={handleEditTemplate}
-        loading={loading}
-        setLoading={setLoading}
+        selectedTemplateData={selectedTemplateData}
         isEditing={isEditing}
       />
     )}

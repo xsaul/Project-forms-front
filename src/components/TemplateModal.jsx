@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { useState, useEffect } from "react";
 
-const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEditing, onEdit, loading, setLoading }) => {
+const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEditing, onEdit, selectedTemplateData }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [topic, setTopic] = useState("Choose a topic");
@@ -17,38 +17,21 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
-const [formReady, setFormReady] = useState(!isEditing);
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
 useEffect(() => {
-  if (!isEditing || !templateId) return;
-  const fetchTemplate = async () => {
-    setFormReady(false);
-    try {
-      const id = templateId;
-      const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
-      const data = await res.json();
-      setTitle(data.title ?? "");
-      setDescription(data.description ?? "");
-      setTopic(data.topic ?? "Choose a topic");
-      setIsPublic(data.isPublic ?? false);
-      setImage(data.image ?? null);
-      setLabels(data.labels ?? []);
-      setQuestions(data.questions ?? []);
-      setQuestionId((data.questions?.length ?? 0) + 1);
-      setTimeout(() => {
-      setFormReady(true);
-    }, 50);
-    } catch (err) {
-      console.error("Failed to fetch template:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchTemplate();
-}, [templateId, isEditing]);
-
+  if (isEditing && selectedTemplateData) {
+    setTitle(selectedTemplateData.title ?? "");
+    setDescription(selectedTemplateData.description ?? "");
+    setTopic(selectedTemplateData.topic ?? "Choose a topic");
+    setIsPublic(selectedTemplateData.isPublic ?? false);
+    setImage(selectedTemplateData.image ?? null);
+    setLabels(selectedTemplateData.labels ?? []);
+    setQuestions(selectedTemplateData.questions ?? []);
+    setQuestionId((selectedTemplateData.questions?.length ?? 0) + 1);
+  }
+}, [selectedTemplateData, isEditing]);
 
   const handleSubmit = () => {
   const newTemplate = {
@@ -113,10 +96,6 @@ return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
   <div className="fixed inset-0 bg-black opacity-50"></div>
   <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
-    {loading || (isEditing && !formReady) ? (
-      <p className="text-gray-500">Loading template...</p>
-    ) : (
-      <>
         <h1 className="text-lg font-bold">New Template</h1>
         <label className="block mt-4">Title</label>
         <input
@@ -273,8 +252,6 @@ return (
             Cancel
           </button>
         </div>
-      </>
-    )}
   </div>
 </Dialog>
   );
