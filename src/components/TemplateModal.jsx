@@ -17,6 +17,8 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
+const [formReady, setFormReady] = useState(false);
+
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
@@ -30,6 +32,7 @@ useEffect(() => {
     setLabels(selectedTemplateData.labels ?? []);
     setQuestions(selectedTemplateData.questions ?? []);
     setQuestionId((selectedTemplateData.questions?.length ?? 0) + 1);
+    setFormReady(true);
   }
 }, [selectedTemplateData, isEditing]);
 
@@ -105,6 +108,10 @@ return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
   <div className="fixed inset-0 bg-black opacity-50"></div>
   <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
+    {!formReady && isEditing ? (
+  <p className="text-gray-500">Loading template...</p>
+) : (
+  <>
         <h1 className="text-lg font-bold">New Template</h1>
         <label className="block mt-4">Title</label>
         <input
@@ -261,6 +268,8 @@ return (
             Cancel
           </button>
         </div>
+        </>
+)}
   </div>
 </Dialog>
   );
