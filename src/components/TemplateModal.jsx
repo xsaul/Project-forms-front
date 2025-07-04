@@ -37,7 +37,9 @@ useEffect(() => {
       setLabels(data.labels ?? []);
       setQuestions(data.questions ?? []);
       setQuestionId((data.questions?.length ?? 0) + 1);
+      setTimeout(() => {
       setFormReady(true);
+    }, 50);
     } catch (err) {
       console.error("Failed to fetch template:", err);
     } finally {
