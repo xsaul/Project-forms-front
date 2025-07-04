@@ -94,7 +94,7 @@ useEffect(() => {
   {templates.map((template, index) => (
     <TemplateCard key={index} template={template} userName={userName} onEditClick={handleEditClick}/>
   ))}
-  {isModalOpen && (
+  {isModalOpen && isEditing && selectedTemplateData && (
       <TemplateModal
         key={selectedTemplateData.id}
         templateId={selectedTemplateId}
