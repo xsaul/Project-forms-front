@@ -17,13 +17,15 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
-const [formReady, setFormReady] = useState(false);
 
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
 useEffect(() => {
+  if (!isOpen) return;
+
   if (isEditing && selectedTemplateData) {
+    console.log("Populating form with:", selectedTemplateData);
     setTitle(selectedTemplateData.title ?? "");
     setDescription(selectedTemplateData.description ?? "");
     setTopic(selectedTemplateData.topic ?? "Choose a topic");
@@ -32,17 +34,20 @@ useEffect(() => {
     setLabels(selectedTemplateData.labels ?? []);
     setQuestions(selectedTemplateData.questions ?? []);
     setQuestionId((selectedTemplateData.questions?.length ?? 0) + 1);
-    setFormReady(true);
   }
-}, [selectedTemplateData, isEditing]);
 
-useEffect(() => {
-  if (isEditing && selectedTemplateData) {
-    console.log("Populating form with:", selectedTemplateData);
+  if (!isEditing) {
+    setTitle("");
+    setDescription("");
+    setTopic("Choose a topic");
+    setIsPublic(false);
+    setImage(null);
+    setLabels([]);
+    setQuestions([]);
+    setQuestionId(1);
   }
-}, [selectedTemplateData, isEditing]);
+}, [isOpen, isEditing, selectedTemplateData]);
 
-console.log("title:", title);
 
 
   const handleSubmit = () => {
@@ -108,10 +113,6 @@ return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
   <div className="fixed inset-0 bg-black opacity-50"></div>
   <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
-    {!formReady && isEditing ? (
-  <p className="text-gray-500">Loading template...</p>
-) : (
-  <>
         <h1 className="text-lg font-bold">New Template</h1>
         <label className="block mt-4">Title</label>
         <input
@@ -268,8 +269,6 @@ return (
             Cancel
           </button>
         </div>
-        </>
-)}
   </div>
 </Dialog>
   );
