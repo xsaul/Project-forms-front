@@ -33,6 +33,13 @@ useEffect(() => {
   }
 }, [selectedTemplateData, isEditing]);
 
+useEffect(() => {
+  if (isEditing && selectedTemplateData) {
+    console.log("Populating form with:", selectedTemplateData);
+  }
+}, [selectedTemplateData, isEditing]);
+
+
   const handleSubmit = () => {
   const newTemplate = {
     title,
