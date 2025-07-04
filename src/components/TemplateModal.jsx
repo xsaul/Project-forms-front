@@ -17,7 +17,7 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
-const [formReady, setFormReady] = useState(false);
+const [formReady, setFormReady] = useState(!isEditing);
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
