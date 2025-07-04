@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { useState, useEffect } from "react";
 
-const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEditing, onEdit }) => {
+const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEditing, onEdit, loading, setLoading }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [topic, setTopic] = useState("Choose a topic");
@@ -17,7 +17,6 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
- const [loading, setLoading] = useState(isEditing);
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
@@ -25,7 +24,6 @@ useEffect(() => {
   if (!isEditing || !templateId) return;
 
   const fetchTemplate = async () => {
-    setLoading(true);
     try {
       const id = templateId;
       const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);

@@ -9,6 +9,7 @@ const Dashboard = ({userName}) => {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCreate = async (newTemplate) => {
     const {image, ...templateData} = newTemplate;
@@ -65,6 +66,7 @@ useEffect(() => {
   function handleEditClick(templateId) {  
   setIsEditing(true);
   setSelectedTemplateId(templateId);
+  setLoading(true);
   setIsModalOpen(true);
 }
     
@@ -91,6 +93,8 @@ useEffect(() => {
         userName={userName}
         onClose={() => {isModalOpen(false); setSelectedTemplateId(null);}}
         onEdit={handleEditTemplate}
+        loading={loading}
+        setLoading={setLoading}
         isEditing={isEditing}
       />
     )}
