@@ -108,6 +108,8 @@ useEffect(() => {
     setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
   };
 
+console.log("Modal props:", { isOpen, isEditing, selectedTemplateData });
+console.log("Form state:", { title, description, topic });
 
 return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
