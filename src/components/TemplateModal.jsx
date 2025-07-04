@@ -17,13 +17,14 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
   checkbox: 0,
   radio: 0,
 });
+const [formReady, setFormReady] = useState(false);
 
 
 console.log("templateId:", templateId, "isEditing:", isEditing);
 useEffect(() => {
   if (!isEditing || !templateId) return;
-
   const fetchTemplate = async () => {
+    setFormReady(false);
     try {
       const id = templateId;
       const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
@@ -36,6 +37,7 @@ useEffect(() => {
       setLabels(data.labels ?? []);
       setQuestions(data.questions ?? []);
       setQuestionId((data.questions?.length ?? 0) + 1);
+      setFormReady(true);
     } catch (err) {
       console.error("Failed to fetch template:", err);
     } finally {
@@ -109,7 +111,7 @@ return (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
   <div className="fixed inset-0 bg-black opacity-50"></div>
   <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
-    {loading ? (
+    {loading || (isEditing && !formReady) ? (
       <p className="text-gray-500">Loading template...</p>
     ) : (
       <>
