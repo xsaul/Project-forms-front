@@ -7,7 +7,7 @@ const Dashboard = ({userName}) => {
 
    const [isModalOpen, setIsModalOpen] = useState(false);
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleCreate = async (newTemplate) => {
@@ -64,7 +64,7 @@ useEffect(() => {
 
   function handleEditClick(templateId) {  
   setIsEditing(true);
-  setSelectedTemplate(templateId);
+  setSelectedTemplateId(templateId);
   setIsModalOpen(true);
 }
     
@@ -85,11 +85,11 @@ useEffect(() => {
   {templates.map((template, index) => (
     <TemplateCard key={index} template={template} userName={userName} onEditClick={handleEditClick}/>
   ))}
-  {isModalOpen && selectedTemplate && (
+  {isModalOpen && selectedTemplateId && (
       <TemplateModal
-        template={selectedTemplate}
+        templateId={selectedTemplateId}
         userName={userName}
-        onClose={() => {isModalOpen(false); setSelectedTemplate(null);}}
+        onClose={() => {isModalOpen(false); setSelectedTemplateId(null);}}
         onEdit={handleEditTemplate}
         isEditing={isEditing}
       />
