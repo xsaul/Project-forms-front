@@ -62,9 +62,9 @@ useEffect(() => {
     fetchTemplates();
   }, []);
 
-  function handleEditClick(template) {  
-  setSelectedTemplate(template);
+  function handleEditClick(templateId) {  
   setIsEditing(true);
+  setSelectedTemplate(templateId);
   setIsModalOpen(true);
 }
     
@@ -87,7 +87,6 @@ useEffect(() => {
   ))}
   {isModalOpen && selectedTemplate && (
       <TemplateModal
-        key={selectedTemplate.id}
         template={selectedTemplate}
         userName={userName}
         onClose={() => {isModalOpen(false); setSelectedTemplate(null);}}

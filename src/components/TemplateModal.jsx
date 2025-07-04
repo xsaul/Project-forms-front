@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { useState, useEffect } from "react";
 
-const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEditing, onEdit }) => {
+const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEditing, onEdit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [topic, setTopic] = useState("Choose a topic");
@@ -17,57 +17,59 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, template, isEdit
   checkbox: 0,
   radio: 0,
 });
-  const [stateReady, setStateReady] = useState(false);
-
 
 useEffect(() => {
-  if (!template && isEditing) return;
-
-  if (isEditing && template) {
-    console.log("Setting state from template:", template);
-    setTitle(template.title ?? "");
-    setDescription(template.description ?? "");
-    setTopic(template.topic ?? "Choose a topic");
-    setIsPublic(template.isPublic ?? false);
-    setImage(template.image ?? null);
-    setLabels(template.labels ?? []);
-    setQuestions(template.questions ?? []);
-    setQuestionId((template.questions?.length ?? 0) + 1);
-   setStateReady(true);
-  } else {
-    setStateReady(true);
+  const fetchTemplate = async () => {
+    try {
+      const res = await fetch(`/api/templates/${templateId}`);
+      const data = await res.json();
+      setTitle(data.title ?? "");
+      setDescription(data.description ?? "");
+      setTopic(data.topic ?? "Choose a topic");
+      setIsPublic(data.isPublic ?? false);
+      setImage(data.image ?? null);
+      setLabels(data.labels ?? []);
+      setQuestions(data.questions ?? []);
+      setQuestionId((data.questions?.length ?? 0) + 1);
+    } catch (err) {
+      console.error("Failed to fetch template:", err);
+    }
+  };
+  if (isEditing && templateId) {
+    fetchTemplate();
   }
-}, [template?.id, isEditing]);
+}, [templateId, isEditing]);
 
 
   const handleSubmit = () => {
-    const newTemplate = {
-    templateId: template?.id,   
-    title: title, 
-    description: description, 
-    topic: topic, 
-    isPublic: isPublic, 
-    image: image || null, 
-    labels: labels, 
-    questions: questions, 
-    authorName: authorName
+  const newTemplate = {
+    title,
+    description,
+    topic,
+    isPublic,
+    image: image || null,
+    labels,
+    questions,
+    authorName,
   };
-  if(isEditing){
+
+  if (isEditing) {
+    newTemplate.templateId = templateId;
     onEdit(newTemplate);
-  }else{
+  } else {
     onCreate(newTemplate);
   }
-    onClose();
-    setTitle("");
-    setDescription("");
-    setTopic("Choose a topic");
-    setIsPublic(false); 
-    setImage(null);
-    setLabels([]);
-    setLabelInput("");
-    setQuestions([]);
-    setQuestionId(1);
-  };
+  onClose();
+  setTitle("");
+  setDescription("");
+  setTopic("Choose a topic");
+  setIsPublic(false);
+  setImage(null);
+  setLabels([]);
+  setLabelInput("");
+  setQuestions([]);
+  setQuestionId(1);
+};
 
   if (!isOpen) return null;
   const handleAddLabel = (e) => {
@@ -97,13 +99,8 @@ useEffect(() => {
     setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
   };
 
-  const handleClose = () => {
-  setStateReady(false);
-  onClose();
-};
 
 return (
-  (!isEditing || stateReady) && (
     <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 flex items-center justify-center">
       <div className="fixed inset-0 bg-black opacity-50"></div>
       <div className="bg-white p-6 rounded-md shadow-lg w-[480px] z-50 overflow-y-auto max-h-[82vh]">
@@ -269,13 +266,12 @@ return (
           </button>
           <button
             className="text-gray-600 hover:underline cursor-pointer"
-            onClick={handleClose}>
+            onClick={onClose}>
             Cancel
           </button>
         </div>
       </div>
     </Dialog>
-    )
   );
 };
 
