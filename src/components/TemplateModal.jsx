@@ -39,6 +39,8 @@ useEffect(() => {
   }
 }, [selectedTemplateData, isEditing]);
 
+console.log("title:", title);
+
 
   const handleSubmit = () => {
   const newTemplate = {
