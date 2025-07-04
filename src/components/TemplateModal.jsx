@@ -21,7 +21,8 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
 useEffect(() => {
   const fetchTemplate = async () => {
     try {
-      const res = await fetch(`/api/templates/${templateId}`);
+     const id = templateId;
+      const res = await fetch(`https://project-forms-back.onrender.com/templates/${id}`);
       const data = await res.json();
       setTitle(data.title ?? "");
       setDescription(data.description ?? "");
