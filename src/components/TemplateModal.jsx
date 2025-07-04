@@ -19,6 +19,8 @@ const TemplateModal = ({ isOpen, onClose, onCreate, authorName, templateId, isEd
 });
 
 useEffect(() => {
+  console.log("templateId:", templateId, "isEditing:", isEditing);
+  if (!isEditing || !templateId) return;
   const fetchTemplate = async () => {
     try {
      const id = templateId;
