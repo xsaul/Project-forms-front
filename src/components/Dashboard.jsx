@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import TemplateCard from "./TemplateCard";
 import TemplateModal from "./TemplateModal";
+import EditQuestionsModal from "./EditQuestionsModal";
 
 const Dashboard = ({userName}) => {
 
    const [isModalOpen, setIsModalOpen] = useState(false);
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [selectedTemplateData, setSelectedTemplateData] = useState(null);
+  const [isEditQuestionsModalOpen, setIsEditQuestionsModalOpen] = useState(false);
 
   const handleCreate = async (newTemplate) => {
     const {image, ...templateData} = newTemplate;
@@ -23,29 +23,26 @@ const Dashboard = ({userName}) => {
   }
   };
 
-  const handleEditTemplate = async (updatedTemplate) => {
-    try{
-  const response = await fetch("https://project-forms-back.onrender.com/editTemplateQuestions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      templateId: updatedTemplate.templateId,
-      authorName: updatedTemplate.authorName,
-      questions: updatedTemplate.questions,
-    }),
-  });
-   if (response.ok) {
-     setTemplates((prevTemplates) =>
-        prevTemplates.map((template) =>
-          template.id === updatedTemplate.templateId
-            ? { ...template, questions: updatedTemplate.questions }
-            : template
-        ));
-   }
-  } catch (err){
-    console.error("Error:", err);
+  const handleEditTemplate = async ({ templateId, questions }) => {
+  try {
+    const response = await fetch("https://project-forms-back.onrender.com/editTemplateQuestions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId, questions }),
+    });
+
+    if (response.ok) {
+      setTemplates((prev) =>
+        prev.map((template) =>
+          template.id === templateId ? { ...template, questions } : template
+        )
+      );
+    }
+  } catch (err) {
+    console.error("Error updating template:", err);
   }
-  };
+};
+
 
 useEffect(() => {
     const fetchTemplates = async () => {
@@ -63,19 +60,16 @@ useEffect(() => {
     fetchTemplates();
   }, []);
 
-  const handleEditClick = (templateId) => {
-  setIsEditing(true);
-  setSelectedTemplateId(templateId);
-  const id = templateId;
-  fetch(`https://project-forms-back.onrender.com/templates/${id}`)
+  const handleOpenEditQuestionsModal = (templateId) => {
+  fetch(`https://project-forms-back.onrender.com/templates/${templateId}`)
     .then((res) => res.json())
     .then((data) => {
       setSelectedTemplateData(data); 
-      setIsModalOpen(true); 
+      setIsEditQuestionsModalOpen(true); 
     })
     .catch((err) => {
       console.error("Failed to fetch template:", err);
-    })
+    });
 };
   return (
     <div className="bg-[#ecf1f4] h-screen">
@@ -92,19 +86,16 @@ useEffect(() => {
       </div>
      <div className="mt-6 grid grid-cols-3 md:grid-cols-3 sm:grid-cols-1 gap-y-4 gap-x-2">
   {templates.map((template, index) => (
-    <TemplateCard key={index} template={template} userName={userName} onEditClick={handleEditClick}/>
+    <TemplateCard key={index} template={template} userName={userName} onEditClick={handleOpenEditQuestionsModal}/>
   ))}
-  {isModalOpen && isEditing && selectedTemplateData && (
-      <TemplateModal
-        key={selectedTemplateData.id}
-        templateId={selectedTemplateId}
-        userName={userName}
-        onClose={() => {setIsModalOpen(false); setSelectedTemplateData(null);}}
-        onEdit={handleEditTemplate}
-        selectedTemplateData={selectedTemplateData}
-        isEditing={isEditing}
-      />
-    )}
+  {isEditQuestionsModalOpen && selectedTemplateData && (
+  <EditQuestionsModal
+    templateId={selectedTemplateData.id}
+    initialQuestions={selectedTemplateData}
+    onClose={() => setIsEditQuestionsModalOpen(false)}
+    onEdit={handleEditTemplate}
+  />
+)}
 </div>
 </div>
     </div>
