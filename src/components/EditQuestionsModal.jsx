@@ -3,7 +3,10 @@ import { Dialog } from "@headlessui/react";
 
 const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) => {
   const [questions, setQuestions] = useState(initialQuestions.questions);
-  const [questionId, setQuestionId] = useState(initialQuestions.questions.length);
+  const [questionId, setQuestionId] = useState(() => {
+  const ids = initialQuestions.questions.map((q) => q.id);
+  return ids.length ? Math.max(...ids) + 1 : 0;
+});
   const [questionTypeCounts, setQuestionTypeCounts] = useState(() => {
   const counts = { string: 0, int: 0, checkbox: 0, radio: 0 };
   initialQuestions.questions.forEach((q) => {
