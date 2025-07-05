@@ -19,6 +19,7 @@ const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) =
     { id: questionId, text: "", type: "" },
     ]);
     setQuestionId((prevId) => prevId + 1);
+    console.log("Adding question with ID:", questionId);
   };
 
   const updateQuestion = (id, field, value) => {
@@ -30,6 +31,9 @@ const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) =
 
   const removeQuestion = (id) => {
     setQuestions((prevQuestions) => prevQuestions.filter((question) => question.id !== id));
+    console.log("Removing question with ID:", id);
+    console.log("Current questions:", questions);
+
   };
 
   const handleSave = () => {
