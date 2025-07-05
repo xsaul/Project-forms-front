@@ -14,8 +14,11 @@ const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) =
 
 
   const addQuestion = () => {
-    setQuestions([...questions, { id: questionId, text: "", type: "" }]);
-    setQuestionId(questionId + 1);
+    setQuestions((prevQuestions) => [
+    ...prevQuestions,
+    { id: questionId, text: "", type: "" },
+    ]);
+    setQuestionId((prevId) => prevId + 1);
   };
 
   const updateQuestion = (id, field, value) => {
