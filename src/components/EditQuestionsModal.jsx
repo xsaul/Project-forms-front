@@ -50,6 +50,7 @@ const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) =
       </button>
       {questions.map((question, index) => (
         <div key={question.id} className="mb-4 py-2">
+            <h3 className="font-semibold text-sm mb-1">Question: {index + 1}</h3>
           <input
             type="text"
             className="w-full p-2 border border-gray-300 rounded"
@@ -129,14 +130,14 @@ const EditQuestionsModal = ({ templateId, initialQuestions, onClose, onEdit }) =
     </div>
         <div className="flex justify-end space-x-2">
           <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
-            Cancel
+            onClick={handleSave}
+            className="bg-[#3e2e2f] hover:bg-[#655859] flex justify-center rounded px-4 py-2 text-white cursor-pointer">
+            Save
           </button>
           <button
-            onClick={handleSave}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Save
+            onClick={onClose}
+            className="text-gray-600 hover:underline cursor-pointer">
+            Cancel
           </button>
         </div>
       </div>
